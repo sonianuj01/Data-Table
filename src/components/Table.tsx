@@ -21,7 +21,6 @@ const Table = () => {
     const [selectedProducts, setSelectedProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
-
     const [selectTargetCount, setSelectTargetCount] = useState<number | null>(null);
 
     const fetchArtworks = async () => {
@@ -33,7 +32,6 @@ const Table = () => {
 
             setData(newData);
 
-            // 🔥 Continue selection if we still need more rows
             if (selectTargetCount !== null && selectedProducts.length < selectTargetCount) {
                 const alreadySelectedIds = new Set(selectedProducts.map(p => p.id));
                 const remainingToSelect = selectTargetCount - selectedProducts.length;
@@ -46,7 +44,7 @@ const Table = () => {
                 setSelectedProducts(updatedSelection);
 
                 if (updatedSelection.length >= selectTargetCount) {
-                    setSelectTargetCount(null); // Selection complete
+                    setSelectTargetCount(null);
                 }
             }
 
@@ -59,24 +57,17 @@ const Table = () => {
 
     useEffect(() => {
         fetchArtworks();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 
-    // 🟡 Called when user enters number to select (e.g., 15)
     const handleRowSelect = (count: number) => {
-        // 1. Clear previous selection
         setSelectedProducts([]);
-
-        // 2. Store intent to select count items
         setSelectTargetCount(count);
 
-        // 3. Immediately select from current page's data
         const rowsFromCurrentPage = data.slice(0, Math.min(count, data.length));
         setSelectedProducts(rowsFromCurrentPage);
 
-        // 4. If not enough, keep going on next pages
         if (rowsFromCurrentPage.length >= count) {
-            setSelectTargetCount(null); // Done
+            setSelectTargetCount(null);
         }
     };
 
@@ -92,9 +83,10 @@ const Table = () => {
                 showGridlines
                 loading={loading}
                 selection={selectedProducts}
-                onSelectionChange={(e) => setSelectedProducts(e.value)}
+                onSelectionChange={(e: { value: Product[] }) => setSelectedProducts(e.value)}
                 dataKey="id"
                 tableStyle={{ minWidth: '50rem' }}
+                selectionMode="multiple"
             >
                 <Column
                     selectionMode="multiple"
