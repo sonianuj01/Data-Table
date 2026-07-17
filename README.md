@@ -77,8 +77,4 @@ src/
 **Anuj Verma**
 
 - GitHub: https://github.com/sonianuj01
-- LinkedIn: https://www.linkedin.com/in/sonianuj01/
 
----
-
-⭐ If you found this project useful, consider giving it a star!
